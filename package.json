@@ -1,0 +1,32 @@
+{
+  "name": "karim_fabrik_bibliotech",
+  "version": "1.0.0",
+  "description": "bibliotech managment system",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "fabrik_bibliotech"
+  },
+  "author": "karim",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cookie-parser": "^1.4.6",
+    "csurf": "^1.11.0",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "moment": "^2.29.4",
+    "mongoose": "^6.10.0",
+    "mongoose-type-email": "^1.1.2",
+    "node-schedule": "^2.1.1"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.20"
+  }
+}
