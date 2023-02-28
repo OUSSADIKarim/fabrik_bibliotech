@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import { csurfProtection } from "./middlewares/jwt.js";
 import { userRouter } from "./routes/userRoutes.js";
 import { categoryRouter } from "./routes/categoryRoutes.js";
 import { bookRouter } from "./routes/bookRoutes.js";
@@ -27,11 +28,12 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(csurfProtection);
 
 app.use("/users", userRouter);
 app.use("/categories", categoryRouter);
 app.use("/books", bookRouter);
 
-app.get("/", (req, res) => {
-  res.send("Hello fabrikers! this is th bibliotech managment system app");
+app.get("/csurf", (req, res) => {
+  res.json({ csurfProtection: req.csrfToken() });
 });

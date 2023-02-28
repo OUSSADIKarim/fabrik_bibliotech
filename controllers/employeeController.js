@@ -5,9 +5,15 @@ export const createEmployee = async (
   firstName,
   lastName,
   email,
-  password
+  hashedPassword
 ) => {
-  const employee = new Employee({ role, firstName, lastName, email, password });
+  const employee = new Employee({
+    role,
+    firstName,
+    lastName,
+    email,
+    password: hashedPassword,
+  });
   await employee.save();
   return employee;
 };

@@ -19,19 +19,3 @@ export const createCategory = async (req, res) => {
     res.status(400).json(error);
   }
 };
-
-export const getCategoriesIds = async (categories) => {
-  const categoriesIds = [];
-  try {
-    await Promise.all(
-      categories.map(async (category) => {
-        const categoryFound = await Category.findOne({ title: category });
-        const categoryId = categoryFound._id;
-        categoriesIds.push(categoryId);
-      })
-    );
-  } catch (error) {
-    console.log(error);
-  }
-  return categoriesIds;
-};

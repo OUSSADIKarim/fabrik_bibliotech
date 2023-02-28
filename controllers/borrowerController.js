@@ -5,9 +5,15 @@ export const createBorrower = async (
   firstName,
   lastName,
   email,
-  password
+  hashedPassword
 ) => {
-  const borrower = new Borrower({ role, firstName, lastName, email, password });
+  const borrower = new Borrower({
+    role,
+    firstName,
+    lastName,
+    email,
+    password: hashedPassword,
+  });
   await borrower.save();
   return borrower;
 };

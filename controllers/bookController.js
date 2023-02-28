@@ -1,5 +1,4 @@
 import { Book } from "../models/Book.js";
-import { getCategoriesIds } from "./categoryController.js";
 
 export const getAllBooks = async (req, res) => {
   try {
@@ -14,7 +13,7 @@ export const createBook = async (req, res) => {
   const { employee, categories, title, author, note, price, copies } = req.body;
 
   try {
-    const categoriesIds = await getCategoriesIds(categories);
+    const categoriesIds = await Book.getCategoriesIds(categories);
     const book = new Book({
       employee,
       categories: categoriesIds,
