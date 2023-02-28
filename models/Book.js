@@ -11,7 +11,7 @@ const bookSchema = new Schema({
 
   categories: [
     {
-      type: Schema.Type.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Category",
     },
   ],

@@ -35,7 +35,6 @@ export const createUser = async (req, res) => {
         email,
         password
       );
-      console.log(borrower);
       res.status(200).json(borrower);
     } catch (error) {
       res.status(400).json(error);

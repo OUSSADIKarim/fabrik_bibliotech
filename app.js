@@ -3,6 +3,8 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import { userRouter } from "./routes/userRoutes.js";
+import { categoryRouter } from "./routes/categoryRoutes.js";
+import { bookRouter } from "./routes/bookRoutes.js";
 
 dotenv.config();
 const port = process.env.PORT || 4040;
@@ -27,7 +29,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/users", userRouter);
+app.use("/categories", categoryRouter);
+app.use("/books", bookRouter);
 
 app.get("/", (req, res) => {
-  ress.send("Hello fabrikers! this is th bibliotech managment system app");
+  res.send("Hello fabrikers! this is th bibliotech managment system app");
 });
