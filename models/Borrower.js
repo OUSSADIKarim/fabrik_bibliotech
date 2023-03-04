@@ -9,7 +9,7 @@ const borrowerSchema = new Schema({
   },
 });
 
-borrowerSchema.statics.setFirstLoanDate = async function (date) {
+borrowerSchema.methods.setFirstLoanDate = async function (date) {
   this.firstLoanDate = date;
   await this.save();
   return;

@@ -39,4 +39,43 @@ const loanSchema = new Schema({
   },
 });
 
+loanSchema.statics.createLoan = async function (borrower, book, book_id) {
+  const loan = new Loan({
+    borrower: borrower,
+    book: book_id,
+  });
+  await loan.save();
+  await book.substractCopy();
+  await book.addLoansNumber();
+
+  return loan;
+};
+
+loanSchema.statics.alreadyBorrowed = async function (borrower, book) {
+  const loan = await Loan.findOne({ borrower, book });
+  if (!loan) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+loanSchema.statics.numberOfLoans = async function (borrower) {
+  const currentMonthStart = moment().startOf("month");
+  const currentMonthEnd = moment().endOf("month");
+  const currentYear = moment().year();
+  const borrowerLoans = await Loan.find({
+    borrower,
+    loanDate: {
+      $gte: currentMonthStart,
+      $lte: currentMonthEnd,
+    },
+    $expr: {
+      $eq: [{ $year: "$loanDate" }, currentYear],
+    },
+  });
+  const numberOfLoans = borrowerLoans.length;
+  return numberOfLoans;
+};
+
 export const Loan = mongoose.model("Loan", loanSchema);

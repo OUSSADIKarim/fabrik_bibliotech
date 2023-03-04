@@ -9,6 +9,17 @@ export const getAllBooks = async (req, res) => {
   }
 };
 
+export const getOneBook = async (req, res) => {
+  const title = req.params.title;
+
+  try {
+    const book = await Book.findOne({ title });
+    res.status(200).json(book);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 export const createBook = async (req, res) => {
   const { employee, categories, title, author, note, price, copies } = req.body;
 

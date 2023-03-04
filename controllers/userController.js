@@ -7,9 +7,9 @@ import { createToken } from "../middlewares/jwt.js";
 export const getAllUsers = async (req, res) => {
   try {
     const users = await User.find();
-    res.json(users);
+    res.status(200).json(users);
   } catch (error) {
-    res.json(error);
+    res.status(400).json(error);
   }
 };
 
@@ -54,25 +54,34 @@ export const login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) {
       res.status(400).json("user not found");
-    }
+    } else {
+      const passwordCompare = await bcrypt.compare(password, user.password);
+      if (!passwordCompare) {
+        res.status(400).json("password is incorrect");
+      } else {
+        const authToken = createToken(user);
 
-    const passwordCompare = await bcrypt.compare(password, user.password);
-    if (!passwordCompare) {
-      res.status(400).json("password is incorrect");
-    }
-
-    const authToken = createToken(user);
-
-    res.cookie(
-      "authToken",
-      { authToken, role: user.role },
-      {
-        httpOnly: true,
-        secure: true,
-        maxAge: 60 * 60 * 24 * 1000, // maxAge : 30 days
+        res.cookie(
+          "authToken",
+          { authToken, role: user.role },
+          {
+            httpOnly: true,
+            secure: true,
+            maxAge: 60 * 60 * 24 * 1000, // maxAge : 30 days
+          }
+        );
+        res.status(200).json(user);
       }
-    );
-    res.status(200).json(user);
+    }
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
+export const logout = async (req, res) => {
+  try {
+    res.clearCookie("authToken");
+    res.status(200).json({ message: "logout success" });
   } catch (error) {
     res.status(400).json(error);
   }

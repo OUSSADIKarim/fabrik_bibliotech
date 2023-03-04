@@ -21,15 +21,18 @@ export const employeeAuthValidation = (req, res, next) => {
   if (role === "Employee") {
     if (!authToken) {
       res.status(400).json("no auth for this action");
+    } else {
+      const decodedToken = verify(authToken, process.env.SECRET_KEY);
+      if (decodedToken.role !== "Employee") {
+        res.status(400).json("no auth for this action");
+      } else {
+        res.locals.user_id = decodedToken._id;
+        next();
+      }
     }
-    const decodedToken = verify(authToken, process.env.SECRET_KEY);
-    if (decodedToken.role !== "Employee") {
-      res.status(400).json("no auth for this action");
-    }
+  } else {
     next();
   }
-
-  next();
 };
 
 export const borrowerAuthValidation = (req, res, next) => {
@@ -39,13 +42,16 @@ export const borrowerAuthValidation = (req, res, next) => {
   if (role === "Borrower") {
     if (!authToken) {
       res.status(400).json("no auth for this action");
+    } else {
+      const decodedToken = verify(authToken, process.env.SECRET_KEY);
+      if (decodedToken.role !== "Borrower") {
+        res.status(400).json("no auth for this action");
+      } else {
+        res.locals.user_id = decodedToken._id;
+        next();
+      }
     }
-    const decodedToken = verify(authToken, process.env.SECRET_KEY);
-    if (decodedToken.role !== "Borrower") {
-      res.status(400).json("no auth for this action");
-    }
+  } else {
     next();
   }
-
-  next();
 };

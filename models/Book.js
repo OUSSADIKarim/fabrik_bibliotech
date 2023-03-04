@@ -39,11 +39,36 @@ const bookSchema = new Schema({
     type: Number,
     required: true,
   },
+
+  loansNumber: {
+    type: Number,
+    default: 0,
+  },
 });
 
-bookSchema.statics.substractCopy = function () {
+bookSchema.virtual("available").get(function () {
+  if (this.copies === 0) {
+    return false;
+  } else {
+    return true;
+  }
+});
+
+bookSchema.methods.substractCopy = async function () {
   this.copies = this.copies - 1;
-  this.save();
+  await this.save();
+  return;
+};
+
+bookSchema.methods.addCopy = async function () {
+  this.copies = this.copies + 1;
+  await this.save();
+  return;
+};
+
+bookSchema.methods.addLoansNumber = async function () {
+  this.loansNumber = this.loansNumber + 1;
+  await this.save();
   return;
 };
 
