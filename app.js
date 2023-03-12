@@ -10,6 +10,7 @@ import { bookRouter } from "./routes/bookRoutes.js";
 import { loanRouter } from "./routes/loanRoutes.js";
 import { Penalty } from "./models/Penalty.js";
 import { Loan } from "./models/Loan.js";
+import { penaltyRouter } from "./routes/penalityRouter.js";
 import { borrowerRouter } from "./routes/borrowerRoutes.js";
 
 dotenv.config();
@@ -39,6 +40,8 @@ app.use("/users", userRouter);
 app.use("/categories", categoryRouter);
 app.use("/books", bookRouter);
 app.use("/loans", loanRouter);
+app.use("/penalties", penaltyRouter);
+app.use("/borrower", borrowerRouter);
 
 // schedueled tasks every midnight
 const createPenalty = nodeSchedule.scheduleJob("0 0 * * *", async () => {

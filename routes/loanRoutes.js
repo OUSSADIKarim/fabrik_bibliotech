@@ -1,5 +1,8 @@
 import express from "express";
-import { borrowerAuthValidation } from "../middlewares/jwt.js";
+import {
+  borrowerAuthValidation,
+  employeeAuthValidation,
+} from "../middlewares/jwt.js";
 import {
   createLoan,
   udpateLoanToReturned,
@@ -9,11 +12,19 @@ import {
 
 export const loanRouter = express.Router();
 
-loanRouter.get("/", getAllLoans);
-loanRouter.get("/:id", getOneLoan);
+loanRouter.get(
+  "/",
+  [borrowerAuthValidation, employeeAuthValidation],
+  getAllLoans
+);
+loanRouter.get(
+  "/:id",
+  [borrowerAuthValidation, employeeAuthValidation],
+  getOneLoan
+);
 loanRouter.post("/create", borrowerAuthValidation, createLoan);
 loanRouter.post(
   "/updateToReturned",
-  borrowerAuthValidation,
+  employeeAuthValidation,
   udpateLoanToReturned
 );

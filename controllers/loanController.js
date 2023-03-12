@@ -13,7 +13,7 @@ export const getAllLoans = async (req, res) => {
 };
 
 export const getOneLoan = async (req, res) => {
-  const loanId = req.params.loanId;
+  const loanId = req.params.id;
   try {
     const loan = await Loan.findOne({ _id: loanId });
     res.status(200).json(loan);
@@ -88,10 +88,10 @@ export const createLoan = async (req, res) => {
 };
 
 export const udpateLoanToReturned = async (req, res) => {
+  const loanId = req.body.loanId;
+  const returned = req.body.returned;
   try {
-    const loanId = req.body.loanId;
-    const returned = req.body.returned;
-    const loan = await Loan.findOne({ _id: loanId }).update({ returned: true });
+    const loan = await Loan.findOne({ _id: loanId }).update({ returned });
     await loan.save();
     res.status(200).json(loan);
   } catch (error) {

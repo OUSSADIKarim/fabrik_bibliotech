@@ -1,4 +1,5 @@
 import express from "express";
+import { employeeAuthValidation } from "../middlewares/jwt.js";
 
 import {
   getAllBooks,
@@ -10,4 +11,4 @@ export const bookRouter = express.Router();
 
 bookRouter.get("/", getAllBooks);
 bookRouter.get("/:title", getOneBook);
-bookRouter.post("/create", createBook);
+bookRouter.post("/create", employeeAuthValidation, createBook);

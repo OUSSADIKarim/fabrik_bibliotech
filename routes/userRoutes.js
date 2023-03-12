@@ -1,5 +1,8 @@
 import express from "express";
-import { borrowerAuthValidation } from "../middlewares/jwt.js";
+import {
+  borrowerAuthValidation,
+  employeeAuthValidation,
+} from "../middlewares/jwt.js";
 import {
   createUser,
   getAllUsers,
@@ -9,7 +12,11 @@ import {
 
 export const userRouter = express.Router();
 
-userRouter.get("/", getAllUsers);
+userRouter.get("/", employeeAuthValidation, getAllUsers);
 userRouter.post("/register", createUser);
 userRouter.post("/login", login);
-userRouter.post("/logout", logout);
+userRouter.post(
+  "/logout",
+  [borrowerAuthValidation, employeeAuthValidation],
+  logout
+);

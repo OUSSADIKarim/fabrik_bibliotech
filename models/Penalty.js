@@ -70,4 +70,9 @@ penaltySchema.statics.checkPresenceOfPenalty = async function (borrower) {
   }
 };
 
+penaltySchema.statics.getBorrowerPenalties = async function (borrower) {
+  const penalties = Penalty.find({ borrower });
+  return penalties;
+};
+
 export const Penalty = mongoose.model("Penalty", penaltySchema);

@@ -13,6 +13,16 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
+export const getOneUser = async (req, res) => {
+  const { email } = req.body.email;
+  try {
+    const user = await User.findOne({ email });
+    res.status(201).json(user);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
+
 export const createUser = async (req, res) => {
   const { role, firstName, lastName, email, password } = req.body;
   const salt = bcrypt.genSaltSync(10);
