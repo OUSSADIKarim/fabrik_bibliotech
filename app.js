@@ -12,6 +12,8 @@ import { Penalty } from "./models/Penalty.js";
 import { Loan } from "./models/Loan.js";
 import { penaltyRouter } from "./routes/penalityRouter.js";
 import { borrowerRouter } from "./routes/borrowerRoutes.js";
+import { commentRouter } from "./routes/commentRoutes.js";
+import { replyCommentRouter } from "./routes/replyCommentRoutes.js";
 
 dotenv.config();
 const port = process.env.PORT || 4040;
@@ -25,6 +27,28 @@ mongoose
   .then((result) => {
     app.listen(port, () => {
       console.log(`This app is running on: http://localhost:${port}`);
+
+      // schedueled penalities task every midnight
+      nodeSchedule.scheduleJob("0 0 * * *", async () => {
+        try {
+          const loans = await Loan.find({ loanDeadline: { $lte: new Date() } });
+          await Promise.all(
+            loans.map(async (loan) => {
+              const penaltyExist = await Penalty.findOne({ _id: loan._id });
+
+              // check if penalty exists for this loan
+              if (penaltyExist) {
+                await penaltyExist.setPrice();
+                await penaltyExist.save();
+              } else {
+                Penalty.createPenalty(loan, loan.borrower);
+              }
+            })
+          );
+        } catch (error) {
+          console.log(error);
+        }
+      });
     });
   })
   .catch((err) => {
@@ -41,21 +65,9 @@ app.use("/categories", categoryRouter);
 app.use("/books", bookRouter);
 app.use("/loans", loanRouter);
 app.use("/penalties", penaltyRouter);
-app.use("/borrower", borrowerRouter);
-
-// schedueled tasks every midnight
-const createPenalty = nodeSchedule.scheduleJob("0 0 * * *", async () => {
-  const loans = await Loan.find({ loanDeadline: { $lte: new Date() } });
-  try {
-    await Promise.all(
-      loans.map(async (loan) => {
-        Penalty.createPenalty(loan, loan.borrower);
-      })
-    );
-  } catch (error) {
-    console.log(error);
-  }
-});
+app.use("/borrowers", borrowerRouter);
+app.use("/comments", commentRouter);
+app.use("/comment-replies", replyCommentRouter);
 
 app.get("/csurf", (req, res) => {
   res.json({ csurfProtection: req.csrfToken() });
