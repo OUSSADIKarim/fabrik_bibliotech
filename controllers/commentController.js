@@ -37,7 +37,6 @@ export const deleteComment = async (req, res) => {
   const commentId = req.body.commentId;
   try {
     const comment = await Comment.findOneAndDelete({ _id: commentId });
-    const commentRplies = await ReplyComment.deleteMany({ comment: commentId });
     res
       .stauts(200)
       .json(

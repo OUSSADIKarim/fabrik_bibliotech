@@ -40,3 +40,13 @@ export const createBook = async (req, res) => {
     res.status(400).json(error);
   }
 };
+
+export const deleteBook = async (req, res) => {
+  const bookId = req.body.bookId;
+  try {
+    const book = await Book.deleteOne({ _id: bookId });
+    res.status(200).json(book);
+  } catch (error) {
+    res.status(400).json(error);
+  }
+};
