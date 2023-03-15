@@ -1,9 +1,9 @@
-import { Comment } from "../models/Comment.js";
+import { MainComment } from "../models/MainComment.js";
 import { ReplyComment } from "./../models/ReplyComment.js";
 
 export const getAllComments = async (req, res) => {
   try {
-    const comments = await Comment.find();
+    const comments = await MainComment.find();
     res.status(201).json(comments);
   } catch (error) {
     res.status(400).json(error);
@@ -13,7 +13,7 @@ export const getAllComments = async (req, res) => {
 export const getOneComment = async (req, res) => {
   const commentId = req.params.commentId;
   try {
-    const comment = await Comment.find({ _id: commentId });
+    const comment = await MainComment.find({ _id: commentId });
     res.status(200).json(comment);
   } catch (error) {
     res.status(400).json(error);
@@ -25,7 +25,7 @@ export const createComment = async (req, res) => {
   const borrower = res.locals.user_id;
 
   try {
-    const comment = await new Comment({ borrower, book, content });
+    const comment = new MainComment({ borrower, book, content });
     await comment.save();
     res.status(200).json(comment);
   } catch (error) {
@@ -36,13 +36,9 @@ export const createComment = async (req, res) => {
 export const deleteComment = async (req, res) => {
   const commentId = req.body.commentId;
   try {
-    const comment = await Comment.findOneAndDelete({ _id: commentId });
-    res
-      .stauts(200)
-      .json(
-        `comment deleted succesully:\ncomment: ${comment}\ncomment replies: ${commentRplies}`
-      );
+    const comment = await MainComment.deleteOne({ _id: commentId });
+    res.status(200).json(comment);
   } catch (error) {
-    res.stauts(400).json(error);
+    res.status(400).json(error);
   }
 };

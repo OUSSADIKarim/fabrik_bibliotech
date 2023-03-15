@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { Category } from "./Category.js";
-import { Comment } from "./Comment.js";
+import { MainComment } from "./MainComment.js";
 import { ReplyComment } from "./ReplyComment.js";
 
 const Schema = mongoose.Schema;
@@ -56,10 +56,6 @@ bookSchema.virtual("available").get(function () {
   }
 });
 
-bookSchema.virtual("bookId").get(function () {
-  return this._id;
-});
-
 bookSchema.methods.substractCopy = async function () {
   this.copies = this.copies - 1;
   await this.save();
@@ -94,17 +90,11 @@ bookSchema.statics.getCategoriesIds = async (categories) => {
   return categoriesIds;
 };
 
-// delete comments before delete
+// delete comments before deleting a book
 bookSchema.pre("deleteOne", async function () {
   const bookId = this.getQuery()._id;
   try {
-    const comments = await Comment.find({ book: bookId });
-    comments.forEach(async (comment) => {
-      const commentReplies = await ReplyComment.deleteMany({
-        comment: comment._id,
-      });
-      await Comment.deleteOne({ _id: comment._id });
-    });
+    const comments = await MainComment.deleteMany({ book: bookId });
   } catch (error) {
     console.log(error);
   }

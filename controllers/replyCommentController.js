@@ -1,5 +1,5 @@
 import { ReplyComment } from "../models/ReplyComment.js";
-import { Comment } from "./../models/Comment.js";
+import { MainComment } from "./../models/MainComment.js";
 
 export const getAllCommentReplies = async (req, res) => {
   const commentId = req.params.commentId;
@@ -15,7 +15,7 @@ export const createCommentReply = async (req, res) => {
   const { commentId, content } = req.body;
   const borrower = res.locals.user_id;
   try {
-    const comment = await Comment.findOne({ _id: commentId });
+    const comment = await MainComment.findOne({ _id: commentId });
     if (!comment) {
       res.status(400).json(`comment not found`);
       return;

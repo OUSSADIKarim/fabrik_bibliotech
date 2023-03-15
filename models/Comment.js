@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const commentSchema = new Schema({
+export const commentSchema = new Schema({
   borrower: {
     type: Schema.Types.ObjectId,
     ref: "User",

@@ -37,6 +37,11 @@ const loanSchema = new Schema({
     required: true,
     default: false,
   },
+
+  renewed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 loanSchema.statics.createLoan = async function (borrower, book, book_id) {
