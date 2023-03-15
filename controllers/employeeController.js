@@ -29,9 +29,15 @@ export const getStats = async (req, res) => {
       numberOfLoans = numberOfLoans + book.loansNumber;
     });
 
+    // get the book with max loans
     const maxLoansNumberBook = await Book.find()
       .sort({ loansNumber: -1 })
       .limit(1);
+
+    // get books with equal max loans
+    const maxLoansNumberBooks = await Book.find({
+      loansNumber: maxLoansNumberBook[0].loansNumber,
+    });
 
     const numberOfBorrowers = await Borrower.find({
       firstLoanDate: { $ne: null },
@@ -41,7 +47,7 @@ export const getStats = async (req, res) => {
 
     res
       .status(200)
-      .json({ numberOfLoans, maxLoansNumberBook, numberOfBorrowers });
+      .json({ numberOfLoans, maxLoansNumberBooks, numberOfBorrowers });
   } catch (error) {
     res.status(400).json(error);
   }
