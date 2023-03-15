@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 const borrowerSchema = new Schema({
   firstLoanDate: {
     type: Date,
+    default: null,
   },
 });
 

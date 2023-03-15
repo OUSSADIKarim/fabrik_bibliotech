@@ -14,6 +14,7 @@ import { penaltyRouter } from "./routes/penalityRouter.js";
 import { borrowerRouter } from "./routes/borrowerRoutes.js";
 import { commentRouter } from "./routes/commentRoutes.js";
 import { replyCommentRouter } from "./routes/replyCommentRoutes.js";
+import { employeeRouter } from "./routes/employeeRoutes.js";
 
 dotenv.config();
 const port = process.env.PORT || 4040;
@@ -66,6 +67,7 @@ app.use("/books", bookRouter);
 app.use("/loans", loanRouter);
 app.use("/penalties", penaltyRouter);
 app.use("/borrowers", borrowerRouter);
+app.use("/employees", employeeRouter);
 app.use("/comments", commentRouter);
 app.use("/comment-replies", replyCommentRouter);
 
