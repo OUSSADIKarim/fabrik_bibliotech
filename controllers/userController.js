@@ -3,6 +3,7 @@ import { User } from "../models/User.js";
 import { createEmployee } from "./employeeController.js";
 import { createBorrower } from "./borrowerController.js";
 import { createToken } from "../middlewares/jwt.js";
+import { transporter, mailOptions } from "./../middlewares/mailSender.js";
 
 export const getAllUsers = async (req, res) => {
   try {
@@ -36,7 +37,20 @@ export const createUser = async (req, res) => {
         email,
         hashedPassword
       );
+
       res.status(200).json(employee);
+
+      //sending registration email
+      mailOptions.to = email;
+      mailOptions.subject = `Registration`;
+      mailOptions.text = `You successfully registrated to fabrik_bibliotech project.`;
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
     } catch (error) {
       res.status(400).json(error);
     }
@@ -50,6 +64,18 @@ export const createUser = async (req, res) => {
         hashedPassword
       );
       res.status(200).json(borrower);
+
+      //sending registration email
+      mailOptions.to = email;
+      mailOptions.subject = `Registration`;
+      mailOptions.text = `You successfully registrated to fabrik_bibliotech project.`;
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
     } catch (error) {
       res.status(400).json(error);
     }

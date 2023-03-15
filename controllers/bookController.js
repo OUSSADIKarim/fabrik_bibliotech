@@ -1,4 +1,5 @@
 import { Book } from "../models/Book.js";
+import { Borrower } from "./../models/Borrower.js";
 
 export const getAllBooks = async (req, res) => {
   try {
@@ -36,6 +37,22 @@ export const createBook = async (req, res) => {
     });
     await book.save();
     res.status(200).json(book);
+
+    //sending book added notification email
+    const borrowers = await Borrower.find();
+    borrowers.forEach((borrower) => {
+      const email = borrower.email;
+      mailOptions.to = email;
+      mailOptions.subject = `Book added`;
+      mailOptions.text = `A new Book was added in fabrik_bibliotech. Check it out`;
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log("Email sent: " + info.response);
+        }
+      });
+    });
   } catch (error) {
     res.status(400).json(error);
   }
